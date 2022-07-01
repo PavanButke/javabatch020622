@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class SpringBootDemoApplication extends SpringBootServletInitializer {
 
 	public static void main(String... args) {
-		
+		System.out.println("RAM");
 		SpringApplication.run(SpringBootDemoApplication.class, args);
 		
 
