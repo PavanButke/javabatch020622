@@ -10,24 +10,24 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = { "test", "com.zensar" })
-public class SpringBootDemoApplication {
+public class SpringBootDemoApplication extends SpringBootServletInitializer {
 
 	public static void main(String... args) {
 		System.out.println("Ram");
 		SpringApplication.run(SpringBootDemoApplication.class, args);
-
 		System.out.println("Laxman");
-		
+
 	}
-	
+
 	@Bean
 	public ModelMapper getModelMapper() {
 		return new ModelMapper();
 	}
 
-	
-	
-	
-	
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		// TODO Auto-generated method stub
+		return super.configure(builder);
+	}
 
 }
