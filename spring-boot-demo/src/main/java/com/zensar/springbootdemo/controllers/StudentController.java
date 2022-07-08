@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zensar.springbootdemo.dto.StudentDto;
 import com.zensar.springbootdemo.entity.Student;
+import com.zensar.springbootdemo.exceptions.StudentNotFoundException;
 import com.zensar.springbootdemo.service.StudentService;
 
 @RestController
@@ -33,8 +35,15 @@ public class StudentController {
 	// http://localhost:8080/student-api/students/1001 GET
 	// @RequestMapping(value = "/students/{studentId}",method=RequestMethod.GET)
 	@GetMapping(value = "/students/{studentId}")
-	public ResponseEntity<StudentDto> getStudent(@PathVariable("studentId") int studentId) {
-		return new ResponseEntity<StudentDto>(studentService.getStudent(studentId), HttpStatus.OK);
+	public ResponseEntity<StudentDto> getStudent(@PathVariable("studentId") int studentId) throws StudentNotFoundException {
+		if(studentService.getStudent(studentId)==null) {
+			System.out.println("Hiiiiiiiiiiiiiiiiiiiii");
+			throw new StudentNotFoundException("Student Not Found");
+		}else {
+			System.out.println("Helllllllloooooooooooooooooooo");
+			new ResponseEntity<StudentDto>(studentService.getStudent(studentId), HttpStatus.OK);
+		}
+		return null;
 	}
 	
 	
@@ -94,5 +103,7 @@ public class StudentController {
 		return new ResponseEntity<List<StudentDto>>(studentService.findByStudentNameAndStudentAge(studentName, age),
 				HttpStatus.OK);
 	}
+	
+	
 
 }

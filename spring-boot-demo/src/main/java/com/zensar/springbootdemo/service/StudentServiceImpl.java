@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.zensar.springbootdemo.dto.StudentDto;
 import com.zensar.springbootdemo.entity.Student;
+import com.zensar.springbootdemo.exceptions.StudentNotFoundException;
 import com.zensar.springbootdemo.repository.StudentRepository;
 
 @Service
@@ -25,36 +26,37 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public StudentDto getStudent(int studentId) {
-		Student student = studentRepository.findById(studentId).get();
+		Student student = studentRepository.findById(studentId).orElse(null);
 
 		// StudentDto dto = mapToDto(student);
+		if (student != null) {
 
-		return modelMapper.map(student, StudentDto.class);
+			return modelMapper.map(student, StudentDto.class);
+		}
+
+		return null;
 
 		// return dto;
 	}
 
 	@Override
-	public List<StudentDto> getAllStudents(int pageNumber,int pageSize) {
-		
-		//List<Student> listOfStudents = studentRepository.findAll();
+	public List<StudentDto> getAllStudents(int pageNumber, int pageSize) {
+
+		// List<Student> listOfStudents = studentRepository.findAll();
 		List<StudentDto> listOfStudentDto = new ArrayList<StudentDto>();
 
-		
-		
-	
-		// Page<Student> findAll = studentRepository.findAll(PageRequest.of(pageNumber, pageSize,Sort.by(Direction.DESC,"studentName")));
-		
-		Page<Student> findAll = studentRepository.findAll(PageRequest.of(pageNumber, pageSize,Direction.ASC,"studentName"));
-		
+		// Page<Student> findAll = studentRepository.findAll(PageRequest.of(pageNumber,
+		// pageSize,Sort.by(Direction.DESC,"studentName")));
+
+		Page<Student> findAll = studentRepository
+				.findAll(PageRequest.of(pageNumber, pageSize, Direction.ASC, "studentName"));
+
 		List<Student> content = findAll.getContent();
-		
+
 		for (Student student : content) {
 			// listOfStudentDto.add(mapToDto(student));
 			listOfStudentDto.add(modelMapper.map(student, StudentDto.class));
 		}
-		
-		
 
 		return listOfStudentDto;
 	}
@@ -95,27 +97,27 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public List<StudentDto> getByStudentName(String studentName) {
-		
-		List<StudentDto> studentDtos=new ArrayList<>();
-		
+
+		List<StudentDto> studentDtos = new ArrayList<>();
+
 		List<Student> students = studentRepository.test(studentName);
-		
-		for(Student student:students)
-			studentDtos.add(modelMapper.map(student,StudentDto.class));
-		
+
+		for (Student student : students)
+			studentDtos.add(modelMapper.map(student, StudentDto.class));
+
 		return studentDtos;
 	}
 
 	@Override
 	public List<StudentDto> findByStudentNameAndStudentAge(String studentName, int age) {
-		
-	List<StudentDto> studentDtos=new ArrayList<>();
-		
-		List<Student> students = studentRepository.test1(studentName,age);
-		
-		for(Student student:students)
-			studentDtos.add(modelMapper.map(student,StudentDto.class));
-		
+
+		List<StudentDto> studentDtos = new ArrayList<>();
+
+		List<Student> students = studentRepository.test1(studentName, age);
+
+		for (Student student : students)
+			studentDtos.add(modelMapper.map(student, StudentDto.class));
+
 		return studentDtos;
 	}
 
